@@ -1,0 +1,21 @@
+{
+  "name": "devtinder",
+  "version": "1.0.0",
+  "description": "tinder application for developers",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "keywords": [
+    "node.js",
+    "express.js",
+    "javaScript",
+    "MongoDB"
+  ],
+  "author": "Rohab Aamir",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
