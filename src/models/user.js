@@ -1,4 +1,5 @@
 const moongose = require('mongoose');
+const validator = require('validator');
 
 const userSchema = new moongose.Schema({
     firstName: {
@@ -16,10 +17,20 @@ const userSchema = new moongose.Schema({
         unique: true,
         lowercase: true,
         trim: true,
+        validate(value) {
+            if (!validator.isEmail(value)) {
+                throw new Error("Invalid email address: " + value);
+            }
+        }
     },
     password: {
         type: String,
         required: true,
+         validate(value) {
+            if (!validator.isStrongPassword(value)) {
+                throw new Error("Enter a strong password");
+            }
+        }
     },
     age: {
         type: Number,
@@ -38,6 +49,11 @@ const userSchema = new moongose.Schema({
     photoUrl: {
         type: String,
         default: 'https://www.example.com/default-photo.jpg',
+        validate(value) {
+            if (!validator.isURL(value)) {
+                throw new Error("Invalid photo Url: " + value);
+            }
+        }
     },
     about: {
         type: String,
