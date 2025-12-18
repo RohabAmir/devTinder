@@ -1,5 +1,7 @@
 const moongose = require('mongoose');
 const validator = require('validator');
+const jwt = require('jsonwebtoken');
+const bycrypt = require('bcrypt');
 
 const userSchema = new moongose.Schema({
     firstName: {
@@ -26,7 +28,7 @@ const userSchema = new moongose.Schema({
     password: {
         type: String,
         required: true,
-         validate(value) {
+        validate(value) {
             if (!validator.isStrongPassword(value)) {
                 throw new Error("Enter a strong password");
             }
@@ -68,5 +70,27 @@ const userSchema = new moongose.Schema({
     }
 
 );
+
+userSchema.methods.getJWTToken = async function () {
+    const user = this;
+    const token = await jwt.sign({ userId: this._id }, 'DevTinder@6969', {
+        expiresIn: '7d'
+    });
+    return token;
+};
+
+userSchema.methods.validatePassword = async function (passwordInputByUser) {
+    const user = this;
+    const passwordHash = user.password;
+    const isPasswordValid = await bycrypt.compare(passwordInputByUser, passwordHash);
+    return isPasswordValid;
+
+}
+// static encrypt so you can call User.encryptPassword
+userSchema.statics.encryptPassword = async function (plainPassword) {
+    const saltRounds = 10;
+    const hashedPassword = await bycrypt.hash(plainPassword, saltRounds);
+    return hashedPassword;
+}
 
 module.exports = moongose.model('User', userSchema);

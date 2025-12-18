@@ -2,20 +2,74 @@ const express = require('express');
 const connectDB = require('./config/database');
 const app = express();
 const User = require('./models/user');
+const { validationSignUpData } = require('./utils/validation');
+const bcrypt = require('bcrypt');
+const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
+const { userAuth } = require('./middlewares/auth');
 
-app.use(express.json()); // Middleware to parse JSON bodies
+
+app.use(express.json()) // Middleware to parse JSON bodies
+app.use(cookieParser()); // Middleware to parse cookies
 
 // Route to handle user sign-up
 app.post('/signUp', async (req, res) => {
-
-    //Creating a new instance of user model
-    const user = new User(req.body);
-
     try {
+        //Validation of data
+        validationSignUpData(req);
+
+        const { firstName, lastName, emailId, password } = req.body;
+
+        // Encrypting password before saving to database
+        const hashedPassword = await User.encryptPassword(password);
+
+        // Creating a new instance of user model
+        const user = new User({
+            firstName,
+            lastName,
+            emailId,
+            password: hashedPassword
+        });
         await user.save();
-        res.send("User created successfully");
+        res.send("User created successfully!");
     } catch (error) {
-        res.status(400).send("Error creating user: " + error.message);
+        res.status(400).send("ERROR : " + error.message);
+    }
+});
+
+// Route to handle user login 
+app.post('/login', async (req, res) => {
+    try {
+        const { emailId, password } = req.body;
+
+        const user = await User.findOne({ emailId: emailId });
+        if (!user) {
+            throw new Error("User not found with email: " + emailId);
+        }
+
+        const isPasswordMatch = await user.validatePassword(password);
+        if (isPasswordMatch) {
+            // Create a JWT Token
+            const token = await user.getJWTToken();
+            // Add the token to cookie and send the response back to the client
+            res.cookie('authToken', token);
+            res.send("Login successful!");
+        } else {
+            throw new Error("Invalid credentials");
+        }
+    } catch (error) {
+        res.status(400).send("ERROR : " + error.message);
+    }
+});
+
+
+// get profile api ( by adding userAuth middleware we are protecting this route )
+app.get('/profile', userAuth, async (req, res) => {
+    try {
+        const user = req.user;
+        res.send(user);
+    } catch (error) {
+        res.status(400).send("ERROR : " + error.message);
     }
 });
 
@@ -67,7 +121,7 @@ app.patch('/user/:userId', async (req, res) => {
         if (!isAllowedUpdate) {
             throw new Error('Update not allowed');
         }
-        if(data?.skills.length > 10){
+        if (data?.skills.length > 10) {
             throw new Error('Skills cannot be more than 10');
         }
         const user = await User.findByIdAndUpdate({ _id: userId }, data, {
