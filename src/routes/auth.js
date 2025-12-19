@@ -6,7 +6,7 @@ const { validationSignUpData } = require('../utils/validation');
 
 
 // Route to handle user sign-up
-authRouter.post('/signUp', async (req, res) => {
+authRouter.post('/signup', async (req, res) => {
     try {
         //Validation of data
         validationSignUpData(req);
@@ -50,6 +50,16 @@ authRouter.post('/login', async (req, res) => {
         } else {
             throw new Error("Invalid credentials");
         }
+    } catch (error) {
+        res.status(400).send("ERROR : " + error.message);
+    }
+});
+
+//Route to handle user logout
+authRouter.post('/logout', (req, res) => {
+    try {
+        res.clearCookie('authToken');
+        res.send("Logout successful!");
     } catch (error) {
         res.status(400).send("ERROR : " + error.message);
     }

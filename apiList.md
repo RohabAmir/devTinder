@@ -9,7 +9,7 @@
 <!-- Profile Router  -->
 - GET /profile/view
 - PATCH /profile/edit
-- PATCH /profile/password
+- PATCH /profile/password ->> Forget Password Api
 
 <!-- Connection Request Router -->
 - POST /request/send/interested/:userId

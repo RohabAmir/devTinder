@@ -1,7 +1,7 @@
 const validator = require('validator');
 
 const validationSignUpData = (req) => {
-    const { firstName, lastName, emailId, password,} = req.body;
+    const { firstName, lastName, emailId, password, } = req.body;
     if (!firstName || !lastName) {
         throw new Error("First name and Last name are required");
     }
@@ -13,6 +13,23 @@ const validationSignUpData = (req) => {
     }
 }
 
+const validationEditProfileData = (req) => {
+    const allowedEditFields = [
+    'firstName', 
+    'lastName', 
+    'photoUrl', 
+    'age', 
+    'gender', 
+    'about', 
+    'skills'
+];
+    const requestedEditFields = Object.keys(req.body);
+    const isEditAllowed = requestedEditFields.every((field) => allowedEditFields.includes(field));
+   return isEditAllowed;
+
+}
+
 module.exports = {
-    validationSignUpData
+    validationSignUpData,
+    validationEditProfileData
 };
