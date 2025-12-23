@@ -15,16 +15,20 @@ const connectionRequestSchema = new mongoose.Schema({
         type: String,
         requireqed: true,
         enum: {
-            values: ['ignore', 'interested', 'accepted', 'rejected'],
-            message: '{VALUE} is not supported'
+            values: ['ignored', 'interested', 'accepted', 'rejected'],
+            message: 'This value of status is not supported'
         },
-        default: 'pending'
     },
 }, {
     timestamps: true
+}
+);
 
+connectionRequestSchema.pre('save', async function () {
+    // check if the fromUserId and toUserId are the same
+  if (this.fromUserId.toString() === this.toUserId.toString()) {
+    throw new Error("You cannot send a connection request to yourself.");
+  }
 });
-
-
 
 module.exports = mongoose.model('ConnectionRequest', connectionRequestSchema);
