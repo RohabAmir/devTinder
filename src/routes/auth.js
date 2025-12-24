@@ -24,7 +24,9 @@ authRouter.post('/signup', async (req, res) => {
             password: hashedPassword
         });
         await user.save();
-        res.send("User created successfully!");
+        res.json({
+            message: 'User registered successfully!'
+        });
     } catch (error) {
         res.status(400).send("ERROR : " + error.message);
     }
@@ -46,7 +48,9 @@ authRouter.post('/login', async (req, res) => {
             const token = await user.getJWTToken();
             // Add the token to cookie and send the response back to the client
             res.cookie('authToken', token);
-            res.send("Login successful!");
+            res.json({
+                message: 'Login successful!'
+            });
         } else {
             throw new Error("Invalid credentials");
         }
