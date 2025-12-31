@@ -2,8 +2,16 @@ const express = require('express');
 const connectDB = require('./config/database');
 const app = express();
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
-app.use(express.json()) // Middleware to parse JSON bodies
+// Middlewares
+app.use(express.json({})) // Middleware to parse JSON bodies
+app.use(
+    cors({
+        origin: 'http://localhost:5173',
+        credentials: true
+    })
+); // Middleware to enable CORS with specific origin and credentials
 app.use(cookieParser()); // Middleware to parse cookies
 
 // Importing Routes

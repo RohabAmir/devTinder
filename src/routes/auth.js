@@ -28,7 +28,7 @@ authRouter.post('/signup', async (req, res) => {
             message: 'User registered successfully!'
         });
     } catch (error) {
-        res.status(400).send("ERROR : " + error.message);
+        res.status(400).json({ error: error.message } );
     }
 });
 
@@ -49,13 +49,14 @@ authRouter.post('/login', async (req, res) => {
             // Add the token to cookie and send the response back to the client
             res.cookie('authToken', token);
             res.json({
-                message: 'Login successful!'
+                message: 'Login successful!',
+                user
             });
         } else {
             throw new Error("Invalid credentials");
         }
     } catch (error) {
-        res.status(400).send("ERROR : " + error.message);
+        res.status(400).json({ error: error.message } );
     }
 });
 
