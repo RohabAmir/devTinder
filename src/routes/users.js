@@ -13,7 +13,7 @@ userRouter.get('/user/requests/recieved', userAuth, async (req, res) => {
         const connectionRequests = await ConnectionRequest.find({
             toUserId: loggedInUser._id,
             status: 'interested'
-        }).populate('fromUserId', "firstName lastName photoUrl gender about skills"); // populate fromUserId with user details
+        }).populate('fromUserId', "firstName lastName age photoUrl gender about skills"); // populate fromUserId with user details
         res.json({
             message: 'Data fetched successfully!',
             data: connectionRequests
@@ -34,7 +34,7 @@ userRouter.get('/user/connections', userAuth, async (req, res) => {
                 { fromUserId: loggedInUser._id, status: 'accepted' },
                 { toUserId: loggedInUser._id, status: 'accepted' }
             ],
-        }).populate('fromUserId toUserId', "firstName lastName photoUrl gender about skills");
+        }).populate('fromUserId toUserId', "firstName lastName photoUrl age gender about skills");
 
         const data = connectionRequests.map(request => {
             // Determine the connected user
@@ -86,7 +86,7 @@ userRouter.get('/feed', userAuth, async (req, res) => {
                 { _id: { $ne: loggedInUser._id } }
             ]
         })
-            .select('firstName lastName photoUrl gender about skills')
+            .select('firstName lastName photoUrl gender about age skills')
             .skip(skip)
             .limit(limit);
 
