@@ -24,12 +24,11 @@ authRouter.post('/signup', async (req, res) => {
             password: hashedPassword
         });
         const savedUser = await user.save();
-        
+
         const token = await savedUser.getJWTToken();
-        res.cookie('authToken', token,{
+        res.cookie('authToken', token, {
             expires: new Date(Date.now() + 8 * 3600000), // Cookie expires in 8 hours
         })
-
         res.json({
             message: 'User registered successfully!',
             data: savedUser
