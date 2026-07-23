@@ -30,7 +30,7 @@ authRouter.post('/signup', async (req, res) => {
             expires: new Date(Date.now() + 8 * 3600000), // Cookie expires in 8 hours
         })
         res.json({
-            message: 'User registered successfully!',
+            message: 'User registered successfully!!',
             data: savedUser
         });
     } catch (error) {
