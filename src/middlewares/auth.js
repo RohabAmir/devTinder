@@ -8,7 +8,7 @@ const userAuth = async (req, res, next) => {
         if (!token) {
             return res.status(401).send("You are unauthorized! Please login first.");
         }
-        // Verify the token
+        // Verify the token and extract the user ID from it
         const decoded = await jwt.verify(token, 'DevTinder@6969');
         const userId = decoded.userId;
         // Find the user associated with the token
