@@ -5,18 +5,18 @@ const connectionRequestSchema = new mongoose.Schema(
         fromUserId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User', // reference to User model
-            requireqed: true,
+            required: true,
 
         },
         toUserId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User', // reference to User model
-            requireqed: true,
+            required: true,
 
         },
         status: {
             type: String,
-            requireqed: true,
+            required: true,
             enum: {
                 values: ['ignored', 'interested', 'accepted', 'rejected'],
                 message: 'This value of status is not supported'

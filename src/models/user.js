@@ -72,7 +72,6 @@ const userSchema = new moongose.Schema({
 );
 
 userSchema.methods.getJWTToken = async function () {
-    const user = this;
     const token = await jwt.sign({ userId: this._id }, 'DevTinder@6969', {
         expiresIn: '7d'
     });
@@ -86,7 +85,7 @@ userSchema.methods.validatePassword = async function (passwordInputByUser) {
     return isPasswordValid;
 
 }
-// static encrypt so you can call User.encryptPassword
+//--> static encrypt so you can call User.encryptPassword
 userSchema.statics.encryptPassword = async function (plainPassword) {
     const saltRounds = 10;
     const hashedPassword = await bycrypt.hash(plainPassword, saltRounds);
