@@ -27,6 +27,7 @@ const connectionRequestSchema = new mongoose.Schema(
 }
 );
 
+//Making a compound index for optimizing the query for finding connection requests between two users.
 connectionRequestSchema.index({ fromUserId: 1, toUserId: 1 });
 
 connectionRequestSchema.pre('save', async function () {

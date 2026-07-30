@@ -16,7 +16,7 @@ const userSchema = new moongose.Schema({
     emailId: {
         type: String,
         required: true,
-        unique: true,
+        unique: true, // Mongoose will create a unique index for this field
         lowercase: true,
         trim: true,
         validate(value) {

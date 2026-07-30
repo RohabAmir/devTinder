@@ -53,7 +53,6 @@ requestRouter.post('/request/send/:status/:toUserId', userAuth, async (req, res)
         })
 
     } catch (error) {
-        console.error("Error sending connection request:", error);
         res.status(400).send("ERROR : " + error.message);
     }
 });

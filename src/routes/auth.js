@@ -16,7 +16,7 @@ authRouter.post('/signup', async (req, res) => {
         // Encrypting password before saving to database
         const hashedPassword = await User.encryptPassword(password);
 
-        // Creating a new instance of user model
+        // Creating a new instance of user modelzz
         const user = new User({
             firstName,
             lastName,
@@ -24,11 +24,15 @@ authRouter.post('/signup', async (req, res) => {
             password: hashedPassword
         });
         const savedUser = await user.save();
-
+        // Create a JWT Token
         const token = await savedUser.getJWTToken();
+        // Add the token to cookie and send the response back to the client
         res.cookie('authToken', token, {
-            expires: new Date(Date.now() + 8 * 3600000), // Cookie expires in 8 hours
-        })
+            expires: new Date(Date.now() + 8 * 3600000),
+            httpOnly: true,
+            secure: true,      // only over HTTPS
+            sameSite: 'strict' // or 'lax' depending on your needs
+        });
         res.json({
             message: 'User registered successfully!',
             data: savedUser
