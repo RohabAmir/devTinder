@@ -5,7 +5,7 @@ const { userAuth } = require('../middlewares/auth');
 const { validationEditProfileData } = require('../utils/validation');
 
 
-// get profile api ( by adding *userAuth* middleware we are protecting this route )
+// get profile apis
 profileRouter.get('/profile/view', userAuth, async (req, res) => {
     try {
         const user = req.user;
