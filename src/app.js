@@ -4,7 +4,7 @@ const app = express();
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
-// Middlewares
+// --> Middlewares
 app.use(express.json({})) // Middleware to parse JSON bodies
 app.use(
     cors({
@@ -14,13 +14,13 @@ app.use(
 ); // Middleware to enable CORS with specific origin and credentials
 app.use(cookieParser()); // Middleware to parse cookies
 
-// Importing Routes
+// --> Importing Routes
 const authRouter = require('./routes/auth');
 const profileRouter = require('./routes/profile');
 const requestRouter = require('./routes/request');
 const userRouter = require('./routes/users');
 
-// Using Routes
+// -->  Using Routes
 app.use('/', authRouter);
 app.use('/', profileRouter);
 app.use('/', requestRouter);
