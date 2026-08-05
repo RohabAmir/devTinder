@@ -41,5 +41,28 @@ profileRouter.patch('/profile/edit', userAuth, async (req, res) => {
     }
 });
 
+profileRouter.patch('/profile/forgot-password', userAuth, async (req, res) => {
+    try {
+        const loggedInUser = req.user;
+        const { newPassword } = req.body;
+
+        if (!newPassword) {
+            throw new Error("New password is required");
+        }
+
+        // Encrypting the new password before saving to database
+        const hashedPassword = await loggedInUser.encryptPassword(newPassword);
+        loggedInUser.password = hashedPassword;
+
+        await loggedInUser.save();
+        res.json({
+            message: `${loggedInUser.firstName}, your password has been updated successfully!`,
+            data: loggedInUser
+        });
+    } catch (error) {
+        res.status(400).send("ERROR : " + error.message);
+    }
+});
+
 
 module.exports = profileRouter;
