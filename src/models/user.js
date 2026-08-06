@@ -50,7 +50,7 @@ const userSchema = new moongose.Schema({
     },
     photoUrl: {
         type: String,
-        default: 'https://www.example.com/default-photo.jpg',
+        default: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTAwtYdBhju1rmfKQYanJ2YiMczyuku4nNZQvRx0DI3Jb2-Hhl3a5J6Ts&s=10',
         validate(value) {
             if (!validator.isURL(value)) {
                 throw new Error("Invalid photo Url: " + value);
